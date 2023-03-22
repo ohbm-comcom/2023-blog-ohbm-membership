@@ -1,3 +1,5 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ohbm-comcom/2023-blog-ohbm-membership/HEAD?labpath=Membership_Over_The_Years.ipynb)
+
 # 2023-blog-ohbm-membership
 Scripts and analysis for the OHBM blogpost introducing MEMBERSHIP+ and overview over membership data.
 
