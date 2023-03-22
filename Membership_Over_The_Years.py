@@ -72,7 +72,8 @@ def warp_continent_data_for_map(continent_data):
     # based on the inefficient solution from here
     # https://stackoverflow.com/questions/45965128/duplicating-pandas-dataframe-rows-based-on-string-split-without-iteration
     map_data = continent_data.copy()
-    map_data = map_data.set_index(['Unnamed: 0', 'Country'])
+    map_data = map_data.reset_index()
+    map_data = map_data.set_index(['index', 'Country'])
 
     df2 = map_data.iloc[:0]
 
@@ -205,7 +206,7 @@ def plot_members_attendees(total_data, sns_cols, filename='members_attendees.png
     low_adjs_members = lowess(total_data['Members'], np.arange(17))[:, 1]
     # Reshaping for seaborn
     total_attendees = total_attendees.melt(value_vars=['Members', 'Attendees'],
-                                           id_vars=['Country', 'Conference', 'Year'],
+                                           id_vars=['Conference', 'Year'],
                                            value_name='Number', var_name='Group')
 
     fig, ax = plt.subplots(1, 1, figsize=(15, 8))
@@ -261,8 +262,8 @@ conference_coordinates = {'2006 Florence': [43.769562, 11.255814, 'Florence'],
                           '2022 Glasgow': [55.8606182,-4.2497933, 'Glasgow']}
 # %%
 #TODO: Adjust paths (also for Binder!)
-continent_data = pd.read_csv('../continent_data.csv', sep='\t')
-total_data = pd.read_csv('../total_data.csv', sep='\t')
+continent_data = pd.read_csv('continent_data.tsv', sep='\t')
+total_data = pd.read_csv('total_data.tsv', sep='\t')
 map_data = warp_continent_data_for_map(continent_data)
 # %%
 plot_members_by_continent(continent_data, conference_continent, sns_cols, None)
