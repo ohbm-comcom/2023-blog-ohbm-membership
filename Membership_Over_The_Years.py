@@ -15,6 +15,8 @@
 
 # %% [markdown]
 # # OHBM Membership over the years
+#
+# Code for the plotting functions used in the [OHBM Blogpost](https://www.ohbmbrainmappingblog.com/blog/introducing-ohbm-membership-membership-over-the-years) that introduces the new OHBM membership tier MEMBERSHIP+ and looks at OHBM’s membership data, reflecting on OHBM’s development from an annual meeting to a scientific society.
 
 # %%
 from watermark import watermark
@@ -33,8 +35,8 @@ print(watermark(packages='pandas,numpy,plotly,matplotlib,PIL,country_converter,s
 
 # %%
 def warp_continent_data_for_map(continent_data):
-    """To create map using px.choropleth, there seems to be no way around specifying eacht country if one wants to plot
-    data on a per continent basis. This slightly inefficient function does this. First by associating each continent
+    """To create map using px.choropleth, there seems to be no way around specifying each country if one wants to plot
+    data on a per-continent basis. This slightly inefficient function does this. First by associating each continent
     with all countries that are associated with a continent and second by creating duplicate rows for each conference /
     continent pair.
 
@@ -89,6 +91,9 @@ def warp_continent_data_for_map(continent_data):
     map_data = df2.reset_index().rename(columns={'level_1': 'Country'})
 
     return map_data
+# %% [markdown]
+# ### Function for figure 1.
+
 # %%
 def plot_members_by_continent(continent_data, conference_continent, sns_cols,
                          filename='Fig1_conference_continent.png'):
@@ -133,6 +138,9 @@ def plot_members_by_continent(continent_data, conference_continent, sns_cols,
 
     if filename is not None:
         plt.savefig(filename, bbox_inches='tight')
+# %% [markdown]
+# ### Function for figure 2.
+
 # %%
 def plot_animated_map(member_data, conference_coordinates, save_to_gif=True, file_name='Fig2_gif_map.png'):
 
@@ -199,6 +207,9 @@ def plot_animated_map(member_data, conference_coordinates, save_to_gif=True, fil
                        optimize=True, duration=750, loop=0)
     else:
         fig.show()
+# %% [markdown]
+# ### Function for figure 3.
+
 # %%
 def plot_members_attendees(total_data, sns_cols, filename='members_attendees.png'):
 
@@ -232,6 +243,11 @@ def plot_members_attendees(total_data, sns_cols, filename='members_attendees.png
 
     if filename is not None:
         plt.savefig(filename, bbox_inches='tight')
+
+
+# %% [markdown]
+# ### Data preparation and setting a few default information by hand.
+
 # %%
 # Seaborn colors
 sns_cols = sns.color_palette(n_colors=3)
@@ -261,13 +277,24 @@ conference_coordinates = {'2006 Florence': [43.769562, 11.255814, 'Florence'],
                           '2021 Virtual': [0, 0, 'Virtual'],
                           '2022 Glasgow': [55.8606182,-4.2497933, 'Glasgow']}
 # %%
-#TODO: Adjust paths (also for Binder!)
 continent_data = pd.read_csv('continent_data.tsv', sep='\t')
 total_data = pd.read_csv('total_data.tsv', sep='\t')
 map_data = warp_continent_data_for_map(continent_data)
+# %% [markdown]
+# ## Plots
+
 # %%
 plot_members_by_continent(continent_data, conference_continent, sns_cols, None)
+# %% [markdown]
+# **Fig. 1**: OHBM membership data per year per continent. Bars in orange indicate if the Annual Meeting took place on the same continent, the virtual conferences are shaded in gray. Note different y-axis ranges for each plot. Numbers for North America include Central America and the Caribbean.
+
 # %%
 plot_animated_map(map_data, conference_coordinates, save_to_gif=False)
+# %% [markdown]
+# **Fig. 2**: Map of OHBM members by country of origin for each year (2006–2022). The location of the Annual Meeting is highlighted for each year. Note that light yellow includes 0; gray indicates countries for which no data is available (i.e., no OHBM members at any time).
+
 # %%
 plot_members_attendees(total_data, sns_cols, None)
+
+# %% [markdown]
+# **Fig. 3**: Total membership over the years, conference attendees for those years, and a LOWESS estimate of the general trend in membership numbers. 
